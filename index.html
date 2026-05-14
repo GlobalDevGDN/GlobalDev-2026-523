@@ -1,0 +1,335 @@
+<!-- Google Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700&display=swap" rel="stylesheet">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div id="gd-chart-wrapper">
+
+  <!-- Heading -->
+  <div class="chart-header">
+    <h2>
+      Chinese lending to Africa is concentrated in energy and transport
+    </h2>
+
+    <p class="chart-subheading">
+      Chinese loan commitments to Africa, by sector, 2000–2023, USD billions
+    </p>
+  </div>
+
+  <!-- Chart -->
+  <div class="chart-container">
+    <canvas id="gdSectorChart"></canvas>
+  </div>
+
+  <!-- Source -->
+  <div class="chart-source">
+    Source: Boston University Global Development Policy Center, Chinese Loans to Africa Database, 2000–2023.
+  </div>
+
+  <!-- GD Badge -->
+  <div class="gd-badge-wrap">
+    <div class="gd-badge">Gd</div>
+  </div>
+
+</div>
+
+<style>
+  #gd-chart-wrapper {
+    background: #F8F4EE;
+    border-radius: 24px;
+    padding: 36px 28px 110px;
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 40px auto;
+    box-sizing: border-box;
+    overflow: hidden;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .chart-header {
+    margin-bottom: 28px;
+  }
+
+  .chart-header h2 {
+    margin: 0 0 10px;
+    font-size: 34px;
+    line-height: 1.15;
+    color: #000000;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .chart-subheading {
+    margin: 0;
+    color: #000000;
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .chart-container {
+    position: relative;
+    width: 100%;
+    height: 820px;
+  }
+
+  #gdSectorChart {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .chart-source {
+    margin-top: 18px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #000000;
+    opacity: 0.72;
+    text-align: left;
+  }
+
+  /* CENTERED GD BADGE */
+  .gd-badge-wrap {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .gd-badge {
+    width: 62px;
+    height: 62px;
+    background: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: #000000;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  }
+
+  @media (max-width: 768px) {
+
+    #gd-chart-wrapper {
+      padding: 26px 18px 110px;
+      border-radius: 18px;
+    }
+
+    .chart-header h2 {
+      font-size: 26px;
+    }
+
+    .chart-subheading {
+      font-size: 14px;
+    }
+
+    .chart-container {
+      height: 920px;
+    }
+
+    .chart-source {
+      margin-top: 16px;
+      font-size: 12px;
+    }
+
+    .gd-badge {
+      width: 56px;
+      height: 56px;
+      font-size: 20px;
+    }
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const chartContainer = document.getElementById('gd-chart-wrapper');
+  let chartLoaded = false;
+
+  const labels = [
+    "Energy",
+    "Transportation",
+    "ICT",
+    "Financial sector",
+    "Water",
+    "Industry, trade, and services",
+    "Other",
+    "Defense and military",
+    "Social protection",
+    "Education",
+    "Agriculture",
+    "Public administration",
+    "Health",
+    "Non-energy mining"
+  ];
+
+  const dataValues = [
+    66.1,
+    52.5,
+    15.3,
+    10.8,
+    8.8,
+    7.7,
+    6.5,
+    2.9,
+    2.4,
+    2.3,
+    2.2,
+    2,
+    1.3,
+    0.2296
+  ];
+
+  function loadChart() {
+
+    if (chartLoaded) return;
+    chartLoaded = true;
+
+    const ctx = document.getElementById('gdSectorChart').getContext('2d');
+
+    new Chart(ctx, {
+
+      type: 'bar',
+
+      data: {
+        labels: labels,
+
+        datasets: [{
+          data: dataValues,
+          backgroundColor: "#ffd166",
+          borderRadius: 10,
+          borderSkipped: false,
+          barPercentage: 0.72,
+          categoryPercentage: 0.84
+        }]
+      },
+
+      options: {
+
+        indexAxis: 'y',
+
+        responsive: true,
+        maintainAspectRatio: false,
+
+        layout: {
+          padding: {
+            left: 10,
+            right: 30
+          }
+        },
+
+        animation: {
+          duration: 1400,
+          easing: 'easeOutQuart'
+        },
+
+        plugins: {
+
+          legend: {
+            display: false
+          },
+
+          tooltip: {
+
+            backgroundColor: '#ffffff',
+            titleColor: '#000000',
+            bodyColor: '#000000',
+            borderColor: '#dddddd',
+            borderWidth: 1,
+
+            titleFont: {
+              family: 'Plus Jakarta Sans',
+              weight: '700'
+            },
+
+            bodyFont: {
+              family: 'Plus Jakarta Sans',
+              weight: '500'
+            },
+
+            callbacks: {
+              label: function(context) {
+                return context.parsed.x + ' USD billions';
+              }
+            }
+          }
+        },
+
+        scales: {
+
+          y: {
+
+            ticks: {
+              color: '#000000',
+              padding: 12,
+              autoSkip: false,
+
+              font: {
+                family: 'Plus Jakarta Sans',
+                weight: '500',
+                size: 12
+              }
+            },
+
+            grid: {
+              display: false
+            },
+
+            border: {
+              display: false
+            }
+          },
+
+          x: {
+
+            beginAtZero: true,
+
+            ticks: {
+              color: '#000000',
+
+              font: {
+                family: 'Plus Jakarta Sans',
+                weight: '500',
+                size: 12
+              }
+            },
+
+            grid: {
+              color: 'rgba(0,0,0,0.08)'
+            },
+
+            border: {
+              display: false
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Lazy load chart when near viewport
+  const observer = new IntersectionObserver((entries) => {
+
+    entries.forEach(entry => {
+
+      if (entry.isIntersecting) {
+        loadChart();
+        observer.unobserve(chartContainer);
+      }
+
+    });
+
+  }, {
+    rootMargin: '200px'
+  });
+
+  observer.observe(chartContainer);
+
+});
+</script>
